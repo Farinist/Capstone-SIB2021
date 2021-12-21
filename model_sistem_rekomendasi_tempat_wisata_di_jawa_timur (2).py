@@ -139,7 +139,7 @@ print(len(wisata_city))
 # Membuat dictionary untuk data ‘wisata_category’, ‘wisata_name’, dan ‘wisata_city’
 wisata_new = pd.DataFrame({
     'Category': wisata_category,
-    'Nama wisata': wisata_name,
+    'wisata_name': wisata_name,
     'City': wisata_city
 })
 wisata_new
@@ -183,7 +183,7 @@ Untuk menghasilkan vektor tf-idf dalam bentuk matriks, gunakan fungsi `todense()
 # Mengubah vektor tf-idf dalam bentuk matriks dengan fungsi todense()
 tfidf_matrix.todense()
 
-"""Selanjutnya, mari kita lihat matriks tf-idf untuk beberapa tempat wisata (Nama wisata) dan kategori tempat wisata (Category)."""
+"""Selanjutnya, mari kita lihat matriks tf-idf untuk beberapa tempat wisata (wisata_name) dan kategori tempat wisata (Category)."""
 
 # Membuat dataframe untuk melihat tf-idf matrix
 # Kolom diisi dengan kategori tempat wisata
@@ -192,10 +192,10 @@ tfidf_matrix.todense()
 pd.DataFrame(
     tfidf_matrix.todense(), 
     columns=tf.get_feature_names(),
-    index=data['Nama wisata']
+    index=data.wisata_name
 ).sample(6, axis=1).sample(10, axis=0)
 
-"""Output matriks tf-idf di atas menunjukkan tempat wisata Goa Putih memiliki kategori air terjun. Goa Putih, matriks menunjukan bahwa tempat wisata tersebut merupakan tempat wisata dengan kategori air terjun. Hal ini terlihat dari nilai matriks 1.0 pada kategori air terjun. Selanjutnya, tempat wisata Kedung Tumpang termasuk dalam kategori pantai. Sedangkan, tempat wisata Museum Majapahit termasuk dalam kategori museum. Demikian seterusnya. 
+"""Output matriks tf-idf di atas menunjukkan tempat wisata *Kawi* memiliki kategori Gunung. Hal ini terlihat dari nilai matriks 1.0 pada kategori gunung. Selanjutnya, tempat wisata *Coban Rondo* termasuk dalam kategori air terjun. Sedangkan, tempat wisata *Trowulan* termasuk dalam kategori museum. Demikian seterusnya. 
 
 Sampai di sini, kita telah berhasil mengidentifikasi representasi fitur penting dari setiap kategori tempat wisata dengan fungsi `tfidfvectorizer`. Kita juga telah menghasilkan matriks yang menunjukkan korelasi antara kategori tempat wisata dengan tempat wisata. Selanjutnya, kita akan menghitung derajat kesamaan antara satu tempat wisata dengan tempat wisata lainnya untuk menghasilkan kandidat tempat wisata yang akan direkomendasikan.
 
@@ -215,7 +215,7 @@ Selanjutnya, mari kita lihat matriks kesamaan setiap tempat wisata dengan menamp
 """
 
 # Membuat dataframe dari variabel cosine_sim dengan baris dan kolom berupa nama tempat wisata
-cosine_sim_df = pd.DataFrame(cosine_sim, index=data['Nama wisata'], columns=data['Nama wisata'])
+cosine_sim_df = pd.DataFrame(cosine_sim, index=data['wisata_name'], columns=data['wisata_name'])
 print('Shape:', cosine_sim_df.shape)
  
 # Melihat similarity matrix pada setiap tempat wisata
@@ -223,5 +223,88 @@ cosine_sim_df.sample(5, axis=1).sample(10, axis=0)
 
 """Dengan cosine similarity, kita berhasil mengidentifikasi kesamaan antara satu tempat wisata dengan tempat wisata lainnya. Shape (100, 100) merupakan ukuran matriks similarity dari data yang kita miliki. Berdasarkan data yang ada, matriks di atas sebenarnya berukuran 100 tempat wisata x 100 tempat wisata (masing-masing dalam sumbu X dan Y). Artinya, kita mengidentifikasi tingkat kesamaan pada 100 nama tempat wisata. Tapi tentu kita tidak bisa menampilkan semuanya. Oleh karena itu, kita hanya memilih 10 tempat wisata pada baris vertikal dan 5 tempat wisata pada sumbu horizontal seperti pada output di atas. 
 
-Angka 1.0 mengindikasikan bahwa tempat wisata pada kolom X (horizontal) memiliki kesamaan dengan tempat wisata pada baris Y (vertikal). Sebagai contoh, tempat wisata Trinil teridentifikasi sama (similar) dengan tempat wisata Trowulan dan Museum Majapahit. Contoh lain, tempat wisata Nglirip teridentifikasi mirip dengan tempat wisata Dlundung, Sumber Maron, dan Coban Putri.
+Angka 1.0 mengindikasikan bahwa tempat wisata pada kolom X (horizontal) memiliki kesamaan dengan tempat wisata pada baris Y (vertikal). Sebagai contoh, tempat wisata *Siring Kemuning* teridentifikasi sama (similar) dengan tempat wisata *Coro*, *Tambakrejo,* dan *Papuma*. Contoh lain, tempat wisata *Coban Rondo* teridentifikasi mirip dengan tempat wisata *Toroan* dan *Sumber Pitu Pujon*.
+
+# **6. Mendapatkan Rekomendasi Tempat Wisata**
+
+## 6.1 Testing Model
+Sebelumnya, kita telah memiliki data similarity (kesamaan) antar tempat wisata. Sekarang saatnya menghasilkan sejumlah tempat wisata yang akan direkomendasikan kepada pengguna. Untuk lebih memahami bagaimana cara kerjanya, lihatlah kembali matriks similarity pada tahap sebelumnya. Sebagai gambaran, simak contoh berikut.
+
+Pengguna X pernah mengunjungi tempat wisata *Coban Rondo*. Kemudian, saat pengguna tersebut berencana untuk mengunjungi tempat wisata lain, sistem akan merekomendasikan tempat wisata *Toroan* atau *Sumber Pitu Pujon*. Nah, rekomendasi kedua tempat wisata ini berdasarkan kesamaan yang dihitung dengan cosine similarity pada tahap sebelumnya. 
+
+Di sini, kita membuat fungsi wisata_recommendations dengan beberapa parameter sebagai berikut:
+
+- **nama_wisata** : Nama tempat wisata (index kemiripan dataframe).
+- **similarity_data** : Dataframe mengenai similarity yang telah kita definisikan sebelumnya.
+- **items** : Nama dan fitur yang digunakan untuk mendefinisikan kemiripan, dalam hal ini adalah ‘wisata_name’ dan ‘Category’.
+- **k** : Banyak rekomendasi yang ingin diberikan.
+
+Keluaran dari sistem rekomendasi ini adalah berupa **top-N recommendation**. Oleh karena itu, kita akan memberikan sejumlah rekomendasi tempat wisata pada pengguna yang diatur dalam parameter k.
 """
+
+def wisata_recommendations(nama_wisata, similarity_data=cosine_sim_df, items=data[['wisata_name', 'Category']], k=5):
+    """
+    Rekomendasi Tempat Wisata berdasarkan kemiripan dataframe
+ 
+    Parameter:
+    ---
+    nama_wisata : tipe data string (str)
+                Nama Tempat Wisata (index kemiripan dataframe)
+    similarity_data : tipe data pd.DataFrame (object)
+                      Kesamaan dataframe, simetrik, dengan tempat wisata sebagai 
+                      indeks dan kolom
+    items : tipe data pd.DataFrame (object)
+            Mengandung kedua nama dan fitur lainnya yang digunakan untuk mendefinisikan kemiripan
+    k : tipe data integer (int)
+        Banyaknya jumlah rekomendasi yang diberikan
+    ---
+ 
+ 
+    Pada index ini, kita mengambil k dengan nilai similarity terbesar 
+    pada index matrix yang diberikan (i).
+    """
+ 
+ 
+    # Mengambil data dengan menggunakan argpartition untuk melakukan partisi secara tidak langsung sepanjang sumbu yang diberikan    
+    # Dataframe diubah menjadi numpy
+    # Range(start, stop, step)
+    index = similarity_data.loc[:,nama_wisata].to_numpy().argpartition(
+        range(-1, -k, -1))
+    
+    # Mengambil data dengan similarity terbesar dari index yang ada
+    closest = similarity_data.columns[index[-1:-(k+2):-1]]
+    
+    # Drop nama_wisata agar nama tempat wisata yang dicari tidak muncul dalam daftar rekomendasi
+    closest = closest.drop(nama_wisata, errors='ignore')
+ 
+    return pd.DataFrame(closest).merge(items).head(k)
+
+"""Perhatikanlah, dengan menggunakan argpartition, kita mengambil sejumlah nilai k tertinggi dari similarity data (dalam kasus ini: dataframe **cosine_sim_df**). Kemudian, kita mengambil data dari bobot (tingkat kesamaan) tertinggi ke terendah. Data ini dimasukkan ke dalam variabel closest. Berikutnya, kita perlu menghapus nama_wisata yang yang dicari agar tidak muncul dalam daftar rekomendasi. 
+
+Dalam kasus ini, nanti kita akan mencari tempat wisata yang mirip dengan Gunung Bromo, sehingga kita perlu drop nama_wisata Bromo agar tidak muncul dalam daftar rekomendais yang diberikan nanti.  
+"""
+
+data[data.wisata_name.eq('Bromo')]
+
+"""Perhatikanlah, Bromo masuk dalam kategori tempat wisata Gunung. Tentu kita berharap rekomendasi yang diberikan adalah tempat wisata dengan kategori yang mirip. 
+
+Nah, sekarang, dapatkan tempat wisata recommendation dengan memanggil fungsi yang telah kita definisikan sebelumnya
+"""
+
+# Mendapatkan rekomendasi tempat wisata yang mirip dengan Bromo
+wisata_recommendations('Bromo')
+
+"""Sistem memberikan rekomendasi 5 nama tempat wisata dengan kategori Gunung.
+
+## 6.2 Evaluasi Model
+Selanjutnya kita akan evaluasi model kita menggunakan metrik **Precision**, dengan cara melihat kesamaan antara kategori tempat wisata yang pernah dikunjungi pengguna dengan kategori tempat wisata yang direkomendasikan sistem.
+
+Dari hasil rekomendasi sistem sebelumnya, diketahui bahwa Bromo termasuk ke dalam kategori Gunung. Dan dari 5 item yang direkomendasikan, semuanya memiliki kategori Gunung (similar).
+"""
+
+recommended_film = 5 # jumlah item yang direkomendasikan sistem
+relevant_film = 5 # jumlah item rekomendasi yang kategorinya relevan (similar) dengan yang pernah dikunjungi pengguna
+precision = relevant_film/recommended_film
+print(precision)
+
+""" Dari hasil ini artinya, precision sistem kita sebesar 5/5 atau 100%."""
