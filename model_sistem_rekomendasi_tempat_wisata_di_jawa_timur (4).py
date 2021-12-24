@@ -175,7 +175,7 @@ tfidf_matrix = tf.fit_transform(data['Category'])
 # Melihat ukuran matrix tfidf
 tfidf_matrix.shape
 
-"""Perhatikanlah, hasil matriks berukuran (100, 6). Nilai 100 merupakan ukuran data dan 22 merupakan matrik kategori tempat wisata. 
+"""Perhatikanlah, hasil matriks berukuran (100, 6). Nilai 100 merupakan ukuran data dan 6 merupakan matrik kategori tempat wisata. 
 
 Untuk menghasilkan vektor tf-idf dalam bentuk matriks, gunakan fungsi `todense()`.
 """
@@ -281,7 +281,7 @@ def wisata_recommendations(nama_wisata, similarity_data=cosine_sim_df, items=dat
 
 """Perhatikanlah, dengan menggunakan argpartition, kita mengambil sejumlah nilai k tertinggi dari similarity data (dalam kasus ini: dataframe **cosine_sim_df**). Kemudian, kita mengambil data dari bobot (tingkat kesamaan) tertinggi ke terendah. Data ini dimasukkan ke dalam variabel closest. Berikutnya, kita perlu menghapus nama_wisata yang yang dicari agar tidak muncul dalam daftar rekomendasi. 
 
-Dalam kasus ini, nanti kita akan mencari tempat wisata yang mirip dengan Gunung Bromo, sehingga kita perlu drop nama_wisata Bromo agar tidak muncul dalam daftar rekomendais yang diberikan nanti.  
+Dalam kasus ini, nanti kita akan mencari tempat wisata yang mirip dengan Gunung Bromo, sehingga kita perlu drop nama_wisata Bromo agar tidak muncul dalam daftar rekomendasi yang diberikan nanti.  
 """
 
 data[data.wisata_name.eq('Bromo')]
