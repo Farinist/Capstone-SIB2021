@@ -302,9 +302,9 @@ Selanjutnya kita akan evaluasi model kita menggunakan metrik **Precision**, deng
 Dari hasil rekomendasi sistem sebelumnya, diketahui bahwa Bromo termasuk ke dalam kategori Gunung. Dan dari 5 item yang direkomendasikan, semuanya memiliki kategori Gunung (similar).
 """
 
-recommended_film = 5 # jumlah item yang direkomendasikan sistem
-relevant_film = 5 # jumlah item rekomendasi yang kategorinya relevan (similar) dengan yang pernah dikunjungi pengguna
-precision = relevant_film/recommended_film
+recommended_wisata = 5 # jumlah item yang direkomendasikan sistem
+relevant_wisata = 5 # jumlah item rekomendasi yang kategorinya relevan (similar) dengan yang pernah dikunjungi pengguna
+precision = relevant_wisata/recommended_wisata
 print(precision)
 
 """ Dari hasil ini artinya, precision sistem kita sebesar 5/5 atau 100%."""
