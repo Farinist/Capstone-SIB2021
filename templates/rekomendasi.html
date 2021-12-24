@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Rekomendasi Tempat Wisata</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+    <header>
+        <div class="container-fluid bg-white text-light p-5 jumbotron">
+            <h1 class="display-4 fw-bold" style="text-align: center; color: white;">Selamat Datang</h1>
+            <hr>
+        </div>
+    </header>
+
+    <div class="wisata">
+        <h2>Rekomendasi Tempat Wisata Jawa timur</h2>
+        <p>Hasil rekomendasi <b>{{ search }}</b></p>
+        <table class="demo-table" align="center">
+            <tr>
+                <th width="250px">Nama Tempat</th>
+                <th width="250px">Kategori</th>
+                <th width="250px">Kota</th>
+            </tr>
+            <tbody class="table_body">
+                <tr>
+                    <td>{{ wisata_name[0] }}</td>
+                    <td>{{ category[0] }}</td>
+                    <td>{{ city[0] }}</td>
+                </tr>
+                <tr>
+                    <td>{{ wisata_name[1] }}</td>
+                    <td>{{ category[1] }}</td>
+                    <td>{{ city[1] }}</td>
+                </tr>
+                <tr>
+                    <td>{{ wisata_name[2] }}</td>
+                    <td>{{ category[2] }}</td>
+                    <td>{{ city[2] }}</td>
+                </tr>
+                <tr>
+                    <td>{{ wisata_name[3] }}</td>
+                    <td>{{ category[3] }}</td>
+                    <td>{{ city[3] }}</td>
+                </tr>
+                <tr>
+                    <td>{{ wisata_name[4] }}</td>
+                    <td>{{ category[4] }}</td>
+                    <td>{{ city[4] }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+  </div>
+<footer id="sticky-footer" class="flex-shrink-0 py-4 bg-secondary text-white">
+    <div class="container text-center" style="text-align: center; color: white;">
+        <small>Copyright &copy; CSD-110</small>
+    </div>
+</footer>
+</body>
+</html>
