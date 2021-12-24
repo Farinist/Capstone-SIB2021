@@ -1,0 +1,121 @@
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-size: 100%;
+  background-repeat: no-repeat;
+  background-color: rgb(14, 16, 20);
+  background-size: cover;
+  line-height: 1.5;
+  color: #000;
+}
+
+@media (min-width: 32rem) {
+  body {
+    font-size: 102.5%;
+  }
+}
+@media (min-width: 54rem) {
+  body {
+    font-size: 105%;
+  }
+}
+@media (min-width: 65rem) {
+  body {
+    font-size: 107.5%;
+  }
+}
+@media (min-width: 75em) {
+  body {
+    font-size: 110%;
+  }
+}
+@media (min-width: 91rem) {
+  body {
+    font-size: 115%;
+  }
+}
+@media (min-width: 115rem) {
+  body {
+    font-size: 120%;
+  }
+}
+@media (min-width: 130rem) {
+  body {
+    font-size: 125%;
+  }
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+figure {
+  max-width: 100%;
+  height: auto;
+  margin: 0;
+}
+
+.absolute-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  height: 100%;
+  width: 100%;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+    
+    .wisata{
+        /* height: 50vh; */
+        margin-top: 5vh;
+        margin-bottom: 5vh;
+        margin-right: 20vh;
+        margin-left: 20vh;
+        display: block;
+        background-color: white;
+        border-radius: 20px;
+        padding: 1em;
+        width: auto;
+        box-shadow: 0px 0px 10px -4px grey;
+        text-align: center;
+    }
+    #Name{
+        width: 60%;
+        padding: 1em;
+        border-radius: 10px;
+        text-align: center;
+        border: 1px solid grey;
+    }
+    #submission_button{
+        width: 15%;
+        padding: 1em;
+        margin: 1em;
+        border-radius: 10px;
+        color: white;
+        background-color:black;
+        border-style: none;
+    }
+    @media screen and (max-width:600px) {
+        .wisata{
+            margin-top: 1vh;
+            margin-bottom: 12vh;
+        }
+}
